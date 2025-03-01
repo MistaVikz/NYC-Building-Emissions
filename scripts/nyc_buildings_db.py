@@ -32,6 +32,7 @@ def main():
     rows = cursor.execute(q_select).fetchall()
     [print(r) for r in rows]
 
+    # Clean up
     conn.commit()
     conn.close()
 

@@ -1,24 +1,19 @@
 from scripts.nyc_buildings_db import *
-
-MIN_SQFT_RESIDENTIAL = 7294843
-MIN_SQFT_WAREHOUSE = 467836
-MIN_SQFT_FACTORIES = 62015
-MIN_SQFT_GARAGES = 467836
-MIN_SQFT_HOTELS = 729483
-MIN_SQFT_HOSPITALS = 467836
-MIN_SQFT_THEATERS = 62015
-MIN_SQFT_STORES = 358208
-MIN_SQFT_OFFICES = 620155
+from util.queries import *
 
 def main():
-    # Connect to Database
+    # Load Filtered Data
     conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+    cursor = conn.cursor()       
+    load_and_filter(cursor)
 
-    # REMOVE
-    rows = cursor.execute(q_select).fetchall()
+    # TESTING
+    rows = cursor.execute("SELECT * FROM v_relevant").fetchall()
     [print(r) for r in rows]
 
+    # Cleanup
+    conn.commit()
+    conn.close()
 
 if __name__ == '__main__':
     main()
