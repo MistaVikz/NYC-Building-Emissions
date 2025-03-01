@@ -1,11 +1,11 @@
 from scripts.nyc_buildings_db import *
-from util.queries import *
+from utils.queries import *
 
 def main():
     # Load Filtered Data
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()       
-    load_and_filter(cursor)
+    view_filtered_data(cursor)
 
     # TESTING
     rows = cursor.execute("SELECT * FROM v_relevant").fetchall()
