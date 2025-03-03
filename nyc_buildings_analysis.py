@@ -1,16 +1,19 @@
-from scripts.nyc_buildings_db import *
-from utils.queries import *
+import sqlite3
+from utils.scenario import *
+from utils.io import *
+
+DB_PATH = 'data/nyc_buildings.db'
 
 def main():
     # Load Filtered Data
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()       
-    view_filtered_data(cursor)
-
-    # TESTING
-    rows = cursor.execute("SELECT * FROM v_relevant").fetchall()
-    [print(r) for r in rows]
-
+    get_filtered_data(cursor)
+    
+    scenario = []
+    build_scenario(cursor,scenario,1)
+    print(scenario)
+    
     # Cleanup
     conn.commit()
     conn.close()
