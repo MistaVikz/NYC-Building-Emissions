@@ -40,5 +40,5 @@ def build_scenario(cursor, scenario, sq_factor = 1):
         res = query_sum(cursor,filter, min_sqft, sq_factor)
         result = list(res[0])
         scenario.append(result)
-    return scenario
+    return
     
