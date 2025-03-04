@@ -34,11 +34,12 @@ def query_sum(cursor, bc_filter, min_sqft, sq_factor = 1):
     output = cursor.execute(q_sum).fetchall()
     return output
 
-def build_scenario(cursor, scenario, sq_factor = 1):
+def build_scenario(cursor, sq_factor = 1):
+    scenario = []
     # Use WHERE_FILTERS to query all building classes
     for filter, min_sqft in WHERE_FILTERS.items():
         res = query_sum(cursor,filter, min_sqft, sq_factor)
         result = list(res[0])
         scenario.append(result)
-    return
+    return scenario
     
