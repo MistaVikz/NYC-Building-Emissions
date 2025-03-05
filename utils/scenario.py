@@ -28,13 +28,13 @@ WHERE_FILTERS = {RES_FILTER : MIN_SQFT_RESIDENTIAL,
                  STORE_FILTER : MIN_SQFT_STORES,
                  OFF_FILTER : MIN_SQFT_OFFICES}
 
-def query_sum(cursor, bc_filter, min_sqft, sq_factor = 1):
+def query_sum(cursor, bc_filter, min_sqft, sq_factor = 0):
     q_sum = f'''SELECT SUM(NumBuildings), SUM(KwHrYrElecSaving), SUM(LongShort2024HIGH), SUM(LongShort2030HIGH) FROM buildings 
         WHERE DOF >= {min_sqft} * {sq_factor} AND {bc_filter}'''
     output = cursor.execute(q_sum).fetchall()
     return output
 
-def build_scenario(cursor, sq_factor = 1):
+def build_scenario(cursor, sq_factor = 0):
     scenario = []
     # Use WHERE_FILTERS to query all building classes
     for filter, min_sqft in WHERE_FILTERS.items():

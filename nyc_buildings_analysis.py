@@ -3,6 +3,7 @@ from utils.scenario import *
 from utils.io import *
 
 DB_PATH = 'data/nyc_buildings.db'
+SQFT_LIST = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
 
 def main():
     # Load Filtered Data
@@ -11,12 +12,10 @@ def main():
     get_filtered_data(cursor)
     
     # Get Scenario Results
-    i=1
-    while (i <= 2):
-        scenario = build_scenario(cursor,i)
+    for sqft in SQFT_LIST:
+        scenario = build_scenario(cursor,1 + sqft)
         print(scenario) # Replace with io function to create and print dataframes
-        i+=0.1
-    
+        
     # Cleanup
     conn.commit()
     conn.close()
