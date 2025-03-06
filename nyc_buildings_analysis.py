@@ -14,8 +14,8 @@ def main():
     # Get Scenario Results
     for sqft in SQFT_LIST:
         scenario = build_scenario(cursor,1 + sqft)
-        print(scenario) # Replace with io function to create and print dataframes
-        
+        print_scenario(scenario, sqft)
+
     # Cleanup
     conn.commit()
     conn.close()
