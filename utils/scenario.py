@@ -29,6 +29,18 @@ WHERE_FILTERS = {RES_FILTER : MIN_SQFT_RESIDENTIAL,
                  OFF_FILTER : MIN_SQFT_OFFICES}
 
 def query_sum(cursor, bc_filter, min_sqft, sq_factor = 0):
+    """
+    Queries the database to get the sum of various metrics for buildings that meet the specified criteria.
+    
+    Args:
+        cursor (sqlite3.Cursor): The database cursor to execute the SQL command.
+        bc_filter (str): The filter condition for the building class.
+        min_sqft (int): The minimum square footage required for the building class.
+        sq_factor (float, optional): The square footage factor to adjust the minimum square footage. Defaults to 0.
+    
+    Returns:
+        list: A list containing the adjusted minimum square footage and the sum of various metrics.
+    """
     min_sqft_needed = min_sqft * sq_factor
     q_sum = f'''SELECT SUM(NumBuildings), SUM(KwHrYrElecSaving), SUM(LongShort2024HIGH), SUM(LongShort2030HIGH) FROM buildings 
         WHERE DOF >= {min_sqft_needed} AND {bc_filter}'''
@@ -38,6 +50,16 @@ def query_sum(cursor, bc_filter, min_sqft, sq_factor = 0):
     return output
 
 def build_scenario(cursor, sq_factor = 0):
+    """
+    Builds a scenario by querying the database for all building classes and aggregating the results.
+    
+    Args:
+        cursor (sqlite3.Cursor): The database cursor to execute the SQL command.
+        sq_factor (float, optional): The square footage factor to adjust the minimum square footage. Defaults to 0.
+    
+    Returns:
+        list: A list of lists, where each inner list contains the results for a specific building class.
+    """
     scenario = []
     # Use WHERE_FILTERS to query all building classes
     for filter, min_sqft in WHERE_FILTERS.items():
