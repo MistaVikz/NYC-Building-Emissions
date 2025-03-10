@@ -49,7 +49,7 @@ def query_sum(cursor, bc_filter, min_sqft, sq_factor = 0):
     output = [min_sqft_needed] + output
     return output
 
-def build_scenario(cursor, sq_factor = 0):
+def build_threshold_scenario(cursor, sq_factor = 0):
     """
     Builds a scenario by querying the database for all building classes and aggregating the results.
     

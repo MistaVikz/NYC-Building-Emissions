@@ -1,5 +1,5 @@
 import sqlite3
-from utils.scenario import *
+from utils.threshold import *
 from utils.io import *
 
 DB_PATH = 'data/nyc_buildings.db'
@@ -11,10 +11,13 @@ def main():
     cursor = conn.cursor()       
     get_filtered_data(cursor)
     
-    # Get Scenario Results
+    # Create Output Folder
+    output_folder = create_output_folder()
+    
+    # Calculate and Print the Threshold Scenarios
     for sqft in SQFT_LIST:
-        scenario = build_scenario(cursor,1 + sqft)
-        print_scenario(scenario, sqft)
+        scenario = build_threshold_scenario(cursor,1 + sqft)
+        print_scenario(scenario, sqft, output_folder)
 
     # Cleanup
     conn.commit()

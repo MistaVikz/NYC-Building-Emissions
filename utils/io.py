@@ -1,4 +1,6 @@
 import pandas as pd
+import os
+import datetime
 
 BC_LIST = ['Residential', 'Warehouses', 'Factories', 'Garages', 'Hotels', 'Hospitals', 'Theaters', 'Stores', 'Offices']
 
@@ -20,17 +22,18 @@ def get_filtered_data(cursor):
     cursor.execute(v_relevant).fetchall()
     return 
 
-def print_scenario(scenario, sq_factor):
+def print_scenario(scenario, sq_factor, output_folder):
     """
-    Prints the scenario data as a DataFrame with additional information.
+    Prints the scenario data as a DataFrame with additional information and saves it to a CSV file.
     
     The function builds a DataFrame from the scenario data, fills missing values with 0, 
     converts the 'Number of Buildings' column to integers, and adds a 'Building Class' column.
-    It then prints the DataFrame with a header indicating the scenario type.
+    It then prints the DataFrame with a header indicating the scenario type and saves it to a CSV file.
     
     Args:
         scenario (list): A list of lists containing scenario data.
         sq_factor (float): The square footage factor to be displayed in the header.
+        output_folder (str): The path to the folder where the CSV file will be saved.
     
     Returns:
         None
@@ -50,4 +53,40 @@ def print_scenario(scenario, sq_factor):
     print('------------------------------------------------------------------------------------------------------------')
     print(df_scen)
     print('\n')
+
+    # Create subdirectory for sqft_threshold
+    threshold_dir = os.path.join(output_folder, 'sqft_threshold')
+    os.makedirs(threshold_dir, exist_ok=True)
+
+    # Save DataFrame to CSV
+    csv_filename = f'sqft_threshold_{sq_factor * 100:.2f}%.csv'
+    csv_filepath = os.path.join(threshold_dir, csv_filename)
+    df_scen.to_csv(csv_filepath, index=False)
+    print(f'Squarefoot Threshold Scenario saved to {csv_filepath}')
+
     return
+
+def create_output_folder():
+    """
+    Create an output folder with a timestamp and filters.
+
+    Returns:
+        str: The path to the created output folder.
+    """
+    # Get the current date and time and filters
+    now = datetime.datetime.now()
+    date_time = now.strftime("%Y%m%d_%H%M%S")
+    folder_string = f"Scenario Output - {date_time}"
+
+
+    # Get the current directory of the script
+    current_dir = os.path.dirname(__file__)
+
+    # Construct the path to the output directory
+    output_dir = os.path.join(current_dir, '..', 'output')
+
+    # Create a new folder with the timestamp and filters
+    folder_name = os.path.join(output_dir, folder_string)
+    os.makedirs(folder_name, exist_ok=True)
+
+    return folder_name
