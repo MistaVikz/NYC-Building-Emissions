@@ -20,9 +20,10 @@ def get_filtered_data(cursor):
         LongShort2024HIGH, LongShort2030HIGH, DOF FROM buildings WHERE (BuildingClass NOT LIKE 'M%' AND BuildingClass NOT LIKE 'Y%' 
         AND BuildingClass NOT LIKE 'Q%' AND BuildingClass NOT LIKE 'W%' AND BuildingClass NOT LIKE 'S%' AND BuildingClass != 'R0')'''
     cursor.execute(v_relevant).fetchall()
+    
     return 
 
-def print_scenario(scenario, sq_factor, output_folder):
+def print_threshold(scenario, sq_factor, output_folder):
     """
     Prints the scenario data as a DataFrame with additional information and saves it to a CSV file.
     
@@ -55,7 +56,7 @@ def print_scenario(scenario, sq_factor, output_folder):
     print('\n')
 
     # Create subdirectory for sqft_threshold
-    threshold_dir = os.path.join(output_folder, 'sqft_threshold')
+    threshold_dir = os.path.join(output_folder, 'SQFT-Threshold')
     os.makedirs(threshold_dir, exist_ok=True)
 
     # Save DataFrame to CSV
@@ -65,6 +66,39 @@ def print_scenario(scenario, sq_factor, output_folder):
     print(f'Squarefoot Threshold Scenario saved to {csv_filepath}')
 
     return
+
+def print_bc_sqft(bc_sqft, scen_cols, output_folder, out_name, filename):
+    """
+    Prints the building class square footage data as a DataFrame and saves it to a CSV file.
+    
+    The function builds a DataFrame from the building class square footage data
+    and prints the DataFrame with a header indicating the scenario type.
+    It then saves the DataFrame to a CSV file.
+    """
+    # Build BC Sqft Dataframe
+    df_bc_sqft = pd.DataFrame(bc_sqft, columns=scen_cols)
+    df_bc_sqft = df_bc_sqft.iloc[1:]
+
+    # Print BC Sqft Dataframe
+    print(f'{out_name}')
+    print('------------------------------------------------------------------------------------------------------------')
+    print(df_bc_sqft)
+    print('\n')
+
+    # Save DataFrame to CSV
+    csv_filename = f'{filename}.csv'
+    csv_filepath = os.path.join(output_folder, csv_filename)
+    df_bc_sqft.to_csv(csv_filepath, index=False)
+    print(f'{out_name} saved to {csv_filepath}')
+    
+    return
+
+def create_scenario_folder(output_folder):
+        # Create subdirectory for bc_sqft
+    bc_sqft_dir = os.path.join(output_folder, "High-Low-KWHrs-TonnesPerYear")
+    os.makedirs(bc_sqft_dir, exist_ok=True)
+    
+    return bc_sqft_dir
 
 def create_output_folder():
     """
@@ -77,7 +111,6 @@ def create_output_folder():
     now = datetime.datetime.now()
     date_time = now.strftime("%Y%m%d_%H%M%S")
     folder_string = f"Scenario Output - {date_time}"
-
 
     # Get the current directory of the script
     current_dir = os.path.dirname(__file__)
