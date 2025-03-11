@@ -31,6 +31,7 @@ def print_threshold(scenario, BC_LIST, sq_factor, output_folder):
     
     Args:
         scenario (list): A list of lists containing scenario data.
+        BC_LIST (list): A list of building classes.
         sq_factor (float): The square footage factor to be displayed in the header.
         output_folder (str): The path to the folder where the CSV file will be saved.
     
@@ -72,6 +73,16 @@ def print_bc_sqft(bc_sqft, scen_cols, output_folder, out_name, filename):
     The function builds a DataFrame from the building class square footage data
     and prints the DataFrame with a header indicating the scenario type.
     It then saves the DataFrame to a CSV file.
+    
+    Args:
+        bc_sqft (list): A list of lists containing building class square footage data.
+        scen_cols (list): A list of column names for the DataFrame.
+        output_folder (str): The path to the folder where the CSV file will be saved.
+        out_name (str): The name to be displayed in the header.
+        filename (str): The name of the CSV file to be saved.
+    
+    Returns:
+        None
     """
     # Build BC Sqft Dataframe
     df_bc_sqft = pd.DataFrame(bc_sqft, columns=scen_cols)
@@ -94,6 +105,16 @@ def print_bc_sqft(bc_sqft, scen_cols, output_folder, out_name, filename):
 def print_totals(totals_output, output_folder):
     """
     Prints the totals data as a DataFrame and saves it to a CSV file.
+    
+    The function builds a DataFrame from the totals data and prints the DataFrame with a header.
+    It then saves the DataFrame to a CSV file.
+    
+    Args:
+        totals_output (list): A list of lists containing totals data.
+        output_folder (str): The path to the folder where the CSV file will be saved.
+    
+    Returns:
+        None
     """
     # Build Totals Dataframe
     totals_cols = ['Number of Buildings', 'EmYr2024HIGH', 'LongShort2024HIGH', 'LongShort2030HIGH',
@@ -115,7 +136,16 @@ def print_totals(totals_output, output_folder):
     return
 
 def create_scenario_folder(output_folder):
-        # Create subdirectory for bc_sqft
+    """
+    Creates a subdirectory for building class square footage data within the output folder.
+    
+    Args:
+        output_folder (str): The path to the main output folder.
+    
+    Returns:
+        str: The path to the created subdirectory.
+    """
+    # Create subdirectory for bc_sqft
     bc_sqft_dir = os.path.join(output_folder, "High-Low-KWHrs-TonnesPerYear")
     os.makedirs(bc_sqft_dir, exist_ok=True)
     
