@@ -15,7 +15,7 @@ def query_building_class_sqft(cursor):
     return output
 
 def query_totals(cursor):
-    q_totals = '''SELECT SUM(EmYr2024HIGH), SUM(LongShort2024HIGH), SUM(LongShort2030HIGH), SUM(EmYr2024LOW), 
+    q_totals = '''SELECT SUM(NumBuildings), SUM(EmYr2024HIGH), SUM(LongShort2024HIGH), SUM(LongShort2030HIGH), SUM(EmYr2024LOW), 
         SUM(LongShort2024LOW), SUM(LongShort2030LOW), SUM(KwHrYrElecSaving), SUM(TotYrEmRedVar2024LOW) FROM buildings'''
     output = cursor.execute(q_totals).fetchall()
     output = [list(x) for x in output]

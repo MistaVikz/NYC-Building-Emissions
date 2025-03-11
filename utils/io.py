@@ -2,8 +2,6 @@ import pandas as pd
 import os
 import datetime
 
-BC_LIST = ['Residential', 'Warehouses', 'Factories', 'Garages', 'Hotels', 'Hospitals', 'Theaters', 'Stores', 'Offices']
-
 def get_filtered_data(cursor):
     """
     Creates a view 'v_relevant' in the database if it does not already exist.
@@ -23,7 +21,7 @@ def get_filtered_data(cursor):
     
     return 
 
-def print_threshold(scenario, sq_factor, output_folder):
+def print_threshold(scenario, BC_LIST, sq_factor, output_folder):
     """
     Prints the scenario data as a DataFrame with additional information and saves it to a CSV file.
     
@@ -91,6 +89,29 @@ def print_bc_sqft(bc_sqft, scen_cols, output_folder, out_name, filename):
     df_bc_sqft.to_csv(csv_filepath, index=False)
     print(f'{out_name} saved to {csv_filepath}')
     
+    return
+
+def print_totals(totals_output, output_folder):
+    """
+    Prints the totals data as a DataFrame and saves it to a CSV file.
+    """
+    # Build Totals Dataframe
+    totals_cols = ['Number of Buildings', 'EmYr2024HIGH', 'LongShort2024HIGH', 'LongShort2030HIGH',
+              'EmYr2024LOW', 'LongShort2024LOW', 'LongShort2030LOW', 'KwHrYrElecSaving', 'TotYrEmRedVar2024LOW']
+    df_totals = pd.DataFrame(totals_output, columns=totals_cols)
+    
+    # Print Totals Dataframe
+    print('Summary Totals')
+    print('------------------------------------------------------------------------------------------------------------')
+    print(df_totals)
+    print('\n')
+
+    # Save DataFrame to CSV
+    csv_filename = 'summary_totals.csv'
+    csv_filepath = os.path.join(output_folder, csv_filename)
+    df_totals.to_csv(csv_filepath, index=False)
+    print(f'Summary Totals saved to {csv_filepath}')
+
     return
 
 def create_scenario_folder(output_folder):

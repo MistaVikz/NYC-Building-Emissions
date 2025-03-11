@@ -1,12 +1,15 @@
 import sqlite3
 from utils.threshold import *
 from utils.io import *
-from utils.other import *
+from utils.other_queries import *
 
 DB_PATH = 'data/nyc_buildings.db'
 
-# Scenario Constants
+# Threshold Constants
 THRESHOLD_LIST = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+THRESHOLD_BC_LIST = ['Residential', 'Warehouses', 'Factories', 'Garages', 'Hotels', 'Hospitals', 'Theaters', 'Stores', 'Offices']
+
+# BC_SQFT Constants
 BC_SQFT_COLUMNS = {1 : ['Building Class', 'EmYr2024HIGH', 'LongShort2024HIGH', 'LongShort2030HIGH',
               'EmYr2024LOW', 'LongShort2024LOW', 'LongShort2030LOW', 'KwHrYrElecSaving', 'TotYrEmRedVar2024LOW']
               , 2 : ['Building Class', 'SQFT', 'EmYr2024HIGH', 'LongShort2024HIGH', 'LongShort2030HIGH',
@@ -28,7 +31,7 @@ def main():
     # Calculate and Print the Threshold Scenarios
     for t in THRESHOLD_LIST:
         scenario = build_threshold_scenario(cursor,1 + t)
-        print_threshold(scenario, t, output_folder)
+        print_threshold(scenario, THRESHOLD_BC_LIST, t, output_folder)
 
     # Create Subdirectory for BC_SQFT Queries
     scen_output_folder = create_scenario_folder(output_folder)
@@ -41,8 +44,9 @@ def main():
     bc_sqft_output = query_building_class_sqft(cursor)
     print_bc_sqft(bc_sqft_output, BC_SQFT_COLUMNS[2], scen_output_folder, BC_SQFT_OUTPUT_NAMES[2], BC_SQFT_FILE_NAMES[2])
 
-    # Totals
+    # Summary Totals
     totals_output = query_totals(cursor)
+    print_totals(totals_output, output_folder)
 
     # Cleanup
     conn.commit()
